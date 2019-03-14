@@ -34,6 +34,11 @@ class Config_(metaclass=Singleton):
             else:
                 raise IndexError('Configuration does not have field %s' % key)
 
+    def update(self, config):
+        """Update using a Config instance"""
+        assert isinstance(config, self.__class__)
+        self.__dict__ = config.__dict__
+
     def save(self, config_json):
         """Save configurations into a .json file
 
