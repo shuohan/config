@@ -5,7 +5,7 @@ Installation
 ------------
 .. code-block:: bash
 
-   pip install git+
+   pip install git+https://gitlab.com/shan-utils/config.git
 
 Example
 -------
