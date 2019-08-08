@@ -11,7 +11,7 @@ class Config:
 
     >>> Config.attribute = new_value
 
-    instead of initialize an instance to update the attribute. This class
+    instead of initializing an instance to update the attribute. This class
     supports loading configurations from a ``".json"`` file and saving. Call the
     method :meth:`show` to print out values of all configurations.
 
@@ -60,8 +60,8 @@ class Config:
         """Loads configurations from a :class:`dict`.
 
         Note:
-            Any field in the ``".json"`` file should be a class attribute of
-            this class.
+            Any field in the :class:`dict` should be a class attribute of this
+            class.
 
         Args:
             config (dict): The configurations to load.
