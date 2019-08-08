@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
  
-from config import Config
-from obj import Obj
+from inherited_config import Config
 
-Config.a = 1
-Config.attr = 2
+
+class Obj:
+    def __init__(self):
+        self.a = 1 if Config.a == 1 else 2
+        print(self.a)
+
+
 Config.show()
 Config.save_json('config1.json')
 obj = Obj()
