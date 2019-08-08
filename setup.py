@@ -10,7 +10,7 @@ version = subprocess.check_output(command).decode().strip()
 
 setup(name='config',
       version=version,
-      description='Configuration with Singleton design pattern.',
+      description='Global Configurations',
       author='Shuo Han',
       author_email='shan50@jhu.edu',
       scripts=scripts,
