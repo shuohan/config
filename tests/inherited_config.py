@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import json
 from config import Config as _Config
 
@@ -15,12 +16,16 @@ class Config(_Config):
 
 
 def test_config():
+    dirname = os.path.dirname(__file__)
+    config1 = os.path.join(dirname, 'config1.json')
+    config2 = os.path.join(dirname, 'config2.json')
+
     print(Config())
     assert Config().a == 1
-    Config().save_json('config1.json')
-    with open('config1.json') as jfile:
+    Config().save_json(config1)
+    with open(config1) as jfile:
         assert json.load(jfile) == dict(a=1, b=2)
-    Config().load_json('config2.json')
+    Config().load_json(config2)
     print(Config())
     assert Config().a == 11
     Config().a = 100
