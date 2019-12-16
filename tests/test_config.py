@@ -6,17 +6,14 @@ from inherited_config import Config
 
 class Obj:
     def __init__(self):
-        self.a = 1 if Config.a == 1 else 2
-        print(self.a)
+        self.a = 1 if Config().a == 1 else 2
 
 
-Config.show()
-Config.save_json('config1.json')
-obj = Obj()
+def test_obj():
 
-Config.load_json('config2.json')
-Config.show()
+    obj = Obj()
+    assert obj.a == 1
 
-Config.b = 100
-Config.show()
-obj = Obj()
+    Config().load_json('config2.json')
+    obj = Obj()
+    assert obj.a == 2
