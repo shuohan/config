@@ -8,16 +8,15 @@ class Config(_Config):
     """Global configurations.
 
     """
-    a = 1
-    """int: The first attribute."""
-    attr = 2
-    """int: The second attribute."""
+    def __init__(self):
+        self.a = 1
+        self.b = 2
 
 
 if __name__ == "__main__":
-    Config.show()
-    Config.save_json('config1.json')
-    Config.load_json('config2.json')
-    Config.show()
-    Config.a = 100
-    Config.show()
+    print(Config())
+    Config().save_json('config1.json')
+    Config().load_json('config2.json')
+    print(Config())
+    Config().a = 100
+    print(Config())

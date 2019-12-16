@@ -4,43 +4,40 @@ import os
 import json
 
 
-class Config:
+class _Singleton(type):
+    """Singleton design pattern"""
+    _instance = None
+    def __call__(self, *args, **kwargs):
+        if self._instance is None:
+            self._instance = super().__call__(*args, **kwargs)
+        return self._instance
+
+
+class Config(metaclass=_Singleton):
     """Global configurations.
 
-    Store the global configurations as class attributes. Use
+    This class stores the global configurations using the singleton design
+    pattern. Inherit this class and define attributes during initialization
+    ``__init__``, and use
 
-    >>> Config.attribute = new_value
+    >>> Config().attribute = new_value
 
-    instead of initializing an instance to update the attribute. This class
-    supports loading configurations from a ``".json"`` file and saving. Call the
-    method :meth:`show` to print out values of all configurations.
+    to update the attribute. This class supports loading/saving configurations
+    from/to a ``".json"`` file. Use
+
+    >>> print(Config())
+
+    to print values of all configurations.
+
+    Note:
+        When define the attributes, avoid starting with '_'. Only attributes not
+        starting with '_' are considered configurations.
+
+        When use Config, avoid copying the the attribute values since the new 
+        variables do not update their values automatically when Config changes.
 
     """
-    def __init__(self):
-        raise RuntimeError('The class "Config" should not be initialized')
-
-    @classmethod
-    def _get_attrs(cls):
-        """Returns all attributes."""
-        return [attr for attr in dir(cls)
-                if not callable(getattr(cls, attr))
-                and not attr.startswith('__')]
-
-    @classmethod
-    def show(cls):
-        """Prints out all configurations."""
-        attrs = cls._get_attrs()
-        max_attr_len = max([len(a) for a in attrs])
-        message = list()
-        message.append('Configurations')
-        pattern = '    %%%ds: %%s' % max_attr_len
-        for key in attrs:
-            value = str(getattr(cls, key))
-            message.append(pattern % (key, value))
-        print('\n'.join(message))
-
-    @classmethod
-    def load_json(cls, filepath):
+    def load_json(self, filepath):
         """Loads configurations from a ``".json"`` file.
 
         Note:
@@ -50,13 +47,15 @@ class Config:
         Args:
             filepath (str): The filepath to the configuration file.
 
+        Raises:
+            KeyError: A field is not in the class attributes.
+
         """
         with open(filepath) as jfile:
             loaded = json.load(jfile)
-        cls.load_dict(loaded)
+        self.load_dict(loaded)
 
-    @classmethod
-    def load_dict(cls, config):
+    def load_dict(self, config):
         """Loads configurations from a :class:`dict`.
 
         Note:
@@ -70,14 +69,14 @@ class Config:
             KeyError: A field is not in the class attributes.
 
         """
+        attrs = self._get_attrs()
         for key, value in config.items():
-            if hasattr(cls, key):
-                setattr(cls, key, value)
+            if key in attrs:
+                setattr(self, key, value)
             else:
                 raise KeyError('Config does not have the field %s' % key)
 
-    @classmethod
-    def save_json(cls, filepath):
+    def save_json(self, filepath):
         """Saves configurations into a ``".json"`` file.
 
         Args:
@@ -85,9 +84,26 @@ class Config:
 
         """
         with open(filepath, 'w') as jfile:
-            json.dump(cls.save_dict(), jfile, indent=4)
+            json.dump(self.save_dict(), jfile, indent=4)
 
-    @classmethod
-    def save_dict(cls):
-        """Returns a :class:`dict` of all configurations."""
-        return {key: getattr(cls, key) for key in cls._get_attrs()}
+    def save_dict(self):
+        """Saves configurations into a a :class:`dict`."""
+        return {key: getattr(self, key) for key in self._get_attrs()}
+
+    def _get_attrs(self):
+        """Returns all configuration attributes."""
+        return [attr for attr in dir(self)
+                if not callable(getattr(self, attr))
+                and not attr.startswith('_')]
+
+    def __str__(self):
+        """Prints out all configurations."""
+        attrs = self._get_attrs()
+        max_attr_len = max([len(a) for a in attrs])
+        message = list()
+        message.append('Configurations')
+        pattern = '    %%%ds: %%s' % max_attr_len
+        for key in attrs:
+            value = str(getattr(self, key))
+            message.append(pattern % (key, value))
+        return '\n'.join(message)
