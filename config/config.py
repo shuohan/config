@@ -7,13 +7,20 @@ import json
 class Config:
     """Global configurations.
 
-    Store the global configurations as class attributes. Use
+    Store the global configurations as class attributes. Inherit this class and
+    add configurations as class attributes. Use
 
     >>> Config.attribute = new_value
 
-    instead of initializing an instance to update the attribute. This class
-    supports loading configurations from a ``".json"`` file and saving. Call the
-    method :meth:`show` to print out values of all configurations.
+    instead of initializing an instance to update the attribute.
+
+    Note:
+        When define the attributes, avoid starting with ``"_"``. Only attributes
+        not starting with ``"_"`` are considered configurations.
+
+        When use :class:`Config`, avoid copying the attribute values since the
+        new variables do not update their values automatically when
+        :class:`Config` attributes changes.
 
     """
     def __init__(self):
@@ -24,7 +31,7 @@ class Config:
         """Returns all attributes."""
         return [attr for attr in dir(cls)
                 if not callable(getattr(cls, attr))
-                and not attr.startswith('__')]
+                and not attr.startswith('_')]
 
     @classmethod
     def show(cls):
@@ -70,8 +77,9 @@ class Config:
             KeyError: A field is not in the class attributes.
 
         """
+        attrs = cls._get_attrs()
         for key, value in config.items():
-            if hasattr(cls, key):
+            if key in attrs:
                 setattr(cls, key, value)
             else:
                 raise KeyError('Config does not have the field %s' % key)

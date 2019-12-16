@@ -1,22 +1,25 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
  
+import os
 from inherited_config import Config
 
 
 class Obj:
     def __init__(self):
         self.a = 1 if Config.a == 1 else 2
-        print(self.a)
+
+def test_obj():
+
+    dirname = os.path.dirname(__file__)
+
+    obj = Obj()
+    assert obj.a == 1
+
+    Config.load_json(os.path.join(dirname, 'config2.json'))
+    obj = Obj()
+    assert obj.a == 2
 
 
-Config.show()
-Config.save_json('config1.json')
-obj = Obj()
-
-Config.load_json('config2.json')
-Config.show()
-
-Config.b = 100
-Config.show()
-obj = Obj()
+if __name__ == "__main__":
+    test_obj()
