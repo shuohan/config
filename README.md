@@ -1,5 +1,7 @@
 # Config
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
 Global configurations, supoorting loading from / saving to `".json"` files.
 
 ## Installation
