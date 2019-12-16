@@ -22,19 +22,19 @@ class Config(metaclass=_Singleton):
 
     >>> Config().attribute = new_value
 
-    to update the attribute. This class supports loading/saving configurations
-    from/to a ``".json"`` file. Use
+    to update the attribute. Use
 
     >>> print(Config())
 
     to print values of all configurations.
 
     Note:
-        When define the attributes, avoid starting with '_'. Only attributes not
-        starting with '_' are considered configurations.
+        When define the attributes, avoid starting with ``"_"``. Only attributes
+        not starting with ``"_"`` are considered configurations.
 
-        When use Config, avoid copying the the attribute values since the new 
-        variables do not update their values automatically when Config changes.
+        When use :class:`Config`, avoid copying the attribute values since the new
+        variables do not update their values automatically when :class:`Config`
+        attributes changes.
 
     """
     def load_json(self, filepath):
